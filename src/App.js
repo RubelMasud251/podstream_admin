@@ -1,25 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import styled, { ThemeProvider } from "styled-components";
+import { darkTheme, lightTheme } from "./utils/Themes";
+import Sidebar from "./componets/Sidebar";
+import Navbar from "./componets/Navbar";
+import PodsCast from "./pages/PodsCast";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import UploadPodcast from "./pages/UploadPodcast";
+import EditPodCast from "./pages/EditPodCast";
 
 function App() {
+  const [darkMode, setDarkMode] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+      <BrowserRouter>
+        <Container>
+          <Sidebar
+            menuOpen={menuOpen}
+            setMenuOpen={setMenuOpen}
+            setDarkMode={setDarkMode}
+            darkMode={darkMode}
+          />
+
+          <Frame>
+            <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+            <Routes>
+              <Route path="/" element={<PodsCast />}></Route>
+              <Route path="/upload_podcast" element={<UploadPodcast />}></Route>
+              <Route path="/edit_podcast/:id" element={<EditPodCast />}></Route>
+            </Routes>
+          </Frame>
+        </Container>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
 export default App;
+
+const Container = styled.div`
+  display: flex;
+  background: ${({ theme }) => theme.bgLight};
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+`;
+
+const Frame = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 2.5;
+`;
