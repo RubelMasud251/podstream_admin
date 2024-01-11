@@ -7,6 +7,7 @@ import {
   DarkModeRounded,
   CloudUploadRounded,
   LogoutRounded,
+  NotificationAdd,
 } from "@mui/icons-material";
 import LogoImage from "../Images/Logo.png";
 import { Link } from "react-router-dom";
@@ -24,6 +25,12 @@ const Sidebar = ({ setMenuOpen, menuOpen, setDarkMode, darkMode }) => {
       link: "/upload_podcast",
       name: "Upload PodsCast",
       icon: <CloudUploadRounded />,
+    },
+    {
+      id: 3,
+      link: "/popup",
+      name: "Pop Up",
+      icon: <NotificationAdd />,
     },
   ];
 

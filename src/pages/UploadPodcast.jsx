@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ScaleLoader from "react-spinners/ScaleLoader";
+import { IoCloudUpload } from "react-icons/io5";
 
 const UploadPodcast = () => {
   const url =
@@ -16,7 +18,14 @@ const UploadPodcast = () => {
     formState: { errors },
   } = useForm();
 
+  const [loading, setLoading] = useState(false);
+
   const onSubmit = (data) => {
+    // if (errors.image || errors.guest || errors.link || errors.category) {
+    //   toast.error("Please fill out all required fields");
+    //   return;
+    // }
+    setLoading(true);
     const formData = new FormData();
     formData.append("image", data.image[0]);
 
@@ -40,6 +49,7 @@ const UploadPodcast = () => {
             if (res.data.insertedId) {
               toast("PodCast uploaded Successfully!");
               reset();
+              setLoading(false);
             }
           });
       }
@@ -53,25 +63,42 @@ const UploadPodcast = () => {
           {" "}
           PodsCast Info:{" "}
         </h2>
-        <input
-          type="file"
-          className="block w-full text-center outline-none bg-transparent rounded-md border-2 border-dashed border-purple-400 py-16 cursor-pointer pl-2 pr-10 sm:text-sm sm:leading-6 mb-2"
-          {...register("image")}
-        />
+        <div className="w-full mb-2 rounded-md border-2 border-dashed border-purple-400 py-6 cursor-pointer flex flex-col justify-center ">
+          <div className="justify-center text-center flex">
+            <IoCloudUpload size={60} />
+          </div>
+          <input
+            type="file"
+            className="w-fit mx-auto  text-ellipsis "
+            {...register("image", { required: true })}
+          />
+        </div>
+        {errors.image && (
+          <small className="text-red-500 block">File is required</small>
+        )}
+
         <Label>Guest Name:</Label>
         <input
           type="text"
           placeholder="Guest_Name"
-          className="block w-full outline-none bg-transparent rounded-md border border-purple-400 py-1.5 pl-2 pr-10 sm:text-sm sm:leading-6 mb-2"
+          className="block w-full outline-none bg-transparent rounded-md border border-purple-400 py-1.5 pl-2 pr-10 sm:text-sm sm:leading-6 "
           {...register("guest", { required: true, maxLength: 80 })}
         />
+        {errors.guest && (
+          <small className="text-red-500 block">Guest Name is required</small>
+        )}
+
         <Label>Video Link:</Label>
         <input
           type="text"
           placeholder="Video_Link"
-          className="block w-full outline-none bg-transparent rounded-md border border-purple-400 py-1.5 pl-2 pr-10 sm:text-sm sm:leading-6 mb-2"
+          className="block w-full outline-none bg-transparent rounded-md border border-purple-400 py-1.5 pl-2 pr-10 sm:text-sm sm:leading-6 "
           {...register("link", { required: true, maxLength: 100 })}
         />
+        {errors.link && (
+          <small className="text-red-500 block">Video Link is required</small>
+        )}
+
         <Label>Category:</Label>
         <select
           {...register("category", { required: true })}
@@ -86,13 +113,21 @@ const UploadPodcast = () => {
           <Option value="author">Author</Option>
         </select>
 
-        <input
-          type="submit"
-          value="Upload PodsCast"
-          className="px-2 py-1 cursor-pointer rounded-md text-white bg-purple-600 text-center justify-center mx-auto block mt-4"
-        />
+        {loading ? (
+          <div className="text-center   justify-center flex mt-4">
+            <div className="w-fit  px-16 rounded-md h-10 py-1 bg-purple-600">
+              <ScaleLoader color="#fff" />
+            </div>
+          </div>
+        ) : (
+          <input
+            type="submit"
+            value="Upload PodsCast"
+            disabled={loading}
+            className="px-2 py-2 cursor-pointer rounded-md text-white bg-purple-600 text-center justify-center mx-auto block mt-4"
+          />
+        )}
       </form>
-      <ToastContainer />
     </FormContainer>
   );
 };

@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { Menu } from "@mui/icons-material";
+import { CiMenuFries } from "react-icons/ci";
 
 const Navbar = ({ menuOpen, setMenuOpen }) => {
   return (
     <NavDiv>
       <MenuBtn onClick={() => setMenuOpen(true)}>
-        <Menu />
+        <CiMenuFries />
       </MenuBtn>
       <div class="flex -space-x-2 overflow-hidden justify-end w-full">
         <img
@@ -38,6 +38,8 @@ const NavDiv = styled.div`
 const MenuBtn = styled.div`
   cursor: pointer;
   display: none;
+  font-size: 30px;
+  font-weight: bolder;
   @media (max-width: 1100px) {
     display: block;
   }

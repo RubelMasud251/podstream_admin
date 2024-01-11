@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ScaleLoader from "react-spinners/ScaleLoader";
+import { IoCloudUpload } from "react-icons/io5";
 
 const EditPodCast = () => {
+  const [loading, setLoading] = useState(false);
   const params = useParams();
   const { id } = params;
 
@@ -14,7 +17,7 @@ const EditPodCast = () => {
     register,
     handleSubmit,
     reset,
-
+    control,
     formState: { errors },
   } = useForm();
 
@@ -40,6 +43,11 @@ const EditPodCast = () => {
     "https://api.imgbb.com/1/upload?key=9111c34f5b459b762cfa32ade144b0ec";
 
   const onSubmit = (data) => {
+    if (errors.image || errors.guest || errors.link || errors.category) {
+      toast.error("Please fill out all required fields");
+      return;
+    }
+    setLoading(true);
     const formData = new FormData();
     formData.append("image", data.image[0]);
     axios.post(url, formData).then((res) => {
@@ -61,6 +69,7 @@ const EditPodCast = () => {
             if (res.data.acknowledged) {
               toast("PodCast updated Successfully!");
               reset();
+              setLoading(false);
             }
           });
       }
@@ -73,12 +82,18 @@ const EditPodCast = () => {
           {" "}
           Edit PodsCast Info:{" "}
         </h2>
-        <input
-          type="file"
-          defaultValue={podsCast.thumbnail}
-          className="block w-full text-center outline-none bg-transparent rounded-md border-2 border-dashed border-purple-400 py-16 cursor-pointer pl-2 pr-10 sm:text-sm sm:leading-6 mb-2"
-          {...register("image")}
-        />
+        <div className="w-full mb-2 rounded-md border-2 border-dashed border-purple-400 py-6 cursor-pointer flex flex-col justify-center">
+          <div className="justify-center text-center flex">
+            <IoCloudUpload size={60} />
+          </div>
+          <input
+            defaultValue={podsCast.thumbnail}
+            type="file"
+            className="w-fit mx-auto"
+            {...register("image", { required: true })}
+          />
+        </div>
+
         <Label>Guest Name:</Label>
         <input
           type="text"
@@ -96,22 +111,39 @@ const EditPodCast = () => {
           {...register("link", { maxLength: 100 })}
         />
         <Label>Category:</Label>
-        <select
-          {...register("category", { required: true })}
-          className="block w-full outline-none bg-transparent rounded-md border border-purple-400 py-1.5 pl-2 pr-20 sm:text-sm sm:leading-6 mb-2"
-        >
-          <Option value="sports">Sports</Option>
-          <Option value="entertainment">Entertainment</Option>
-          <Option value="sports">Sports</Option>
-          <Option value="spirituality">Spirituality</Option>
-          <Option value="author">Author</Option>
-        </select>
-
-        <input
-          type="submit"
-          value="Update PodsCast"
-          className="px-2 py-1 cursor-pointer rounded-md text-white bg-purple-600 text-center justify-center mx-auto block mt-4"
+        <Controller
+          name="category"
+          control={control}
+          defaultValue={podsCast.category}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <select
+              {...field}
+              className="block w-full outline-none bg-transparent rounded-md border border-purple-400 py-1.5 pl-2 pr-20 sm:text-sm sm:leading-6 mb-2"
+            >
+              <Option value="sports">Sports</Option>
+              <Option value="entertainment">Entertainment</Option>
+              <Option value="sports">Sports</Option>
+              <Option value="spirituality">Spirituality</Option>
+              <Option value="author">Author</Option>
+            </select>
+          )}
         />
+
+        {loading ? (
+          <div className="text-center   justify-center flex mt-4">
+            <div className="w-fit  px-16 rounded-md h-10 py-1 bg-purple-600">
+              <ScaleLoader color="#fff" />
+            </div>
+          </div>
+        ) : (
+          <input
+            type="submit"
+            value="Update PodsCast"
+            disabled={loading}
+            className="px-2 py-2 cursor-pointer rounded-md text-white bg-purple-600 text-center justify-center mx-auto block mt-4"
+          />
+        )}
       </form>
       <ToastContainer />
     </FormContainer>

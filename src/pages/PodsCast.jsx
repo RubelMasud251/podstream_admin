@@ -2,23 +2,39 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PodcastCart from "../componets/PodcastCart";
 import axios from "axios";
+import ScaleLoader from "react-spinners/ScaleLoader";
 
 const PodsCast = () => {
-  const [AllPodsCast, setAllPodsCast] = useState([]);
+  const [allPodsCast, setAllPodsCast] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
       .get("http://localhost:5000/podCasts")
-      .then((res) => setAllPodsCast(res.data))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        setAllPodsCast(res.data);
+        setLoading(false); // Set loading to false when data is received
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false); // Set loading to false in case of an error
+      });
   }, []);
+
+  if (loading) {
+    return (
+      <div className="text-center h-screen items-center flex justify-center">
+        <ScaleLoader color="#be1adb" />
+      </div>
+    );
+  }
 
   return (
     <PodsCastContainer>
       <FilterContainer>
         <Topic>PodsCasts</Topic>
         <PodsCasts>
-          {AllPodsCast.map((singlePodcast) => (
+          {allPodsCast.map((singlePodcast) => (
             <PodcastCart
               key={singlePodcast._id}
               singlePodcast={singlePodcast}
@@ -84,4 +100,8 @@ const PodsCasts = styled.div`
   @media (max-width: 580px) {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
+`;
+
+const Loading = styled.div`
+  color: ${({ theme }) => theme.text_primary};
 `;
