@@ -1,0 +1,26 @@
+.user-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+  height: 100%;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  padding: 20px;
+  z-index: 1;
+  right: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  width: 300px;
+  background-color: rgb(185, 185, 185);
+  color: black;
+  border-radius: 10px;
+}
+
+.user-dropdown-wrapper:hover .user-dropdown,
+.user-dropdown:hover {
+  opacity: 1;
+  pointer-events: auto;
+}

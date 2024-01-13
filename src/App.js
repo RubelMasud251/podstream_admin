@@ -9,9 +9,9 @@ import PodsCast from "./pages/PodsCast";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import UploadPodcast from "./pages/UploadPodcast";
 import EditPodCast from "./pages/EditPodCast";
-import PopUp from "./pages/PopUp";
+import NotificationPage from "./pages/NotificationPage";
 
-function App() {
+function App({ handleLogout }) {
   const [darkMode, setDarkMode] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -20,19 +20,23 @@ function App() {
       <Notification />
       <BrowserRouter>
         <Container>
-          <Sidebar
-            menuOpen={menuOpen}
-            setMenuOpen={setMenuOpen}
-            setDarkMode={setDarkMode}
-            darkMode={darkMode}
-          />
+          <Sidebar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
 
           <Frame>
-            <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+            <Navbar
+              menuOpen={menuOpen}
+              setMenuOpen={setMenuOpen}
+              setDarkMode={setDarkMode}
+              darkMode={darkMode}
+              handleLogout={handleLogout}
+            />
             <Routes>
               <Route path="/" element={<PodsCast />}></Route>
               <Route path="/upload_podcast" element={<UploadPodcast />}></Route>
-              <Route path="/popup" element={<PopUp />}></Route>
+              <Route
+                path="/notification"
+                element={<NotificationPage />}
+              ></Route>
               <Route path="/edit_podcast/:id" element={<EditPodCast />}></Route>
             </Routes>
           </Frame>
@@ -55,5 +59,5 @@ const Container = styled.div`
 const Frame = styled.div`
   display: flex;
   flex-direction: column;
-  flex: 2.5;
+  flex: 2;
 `;

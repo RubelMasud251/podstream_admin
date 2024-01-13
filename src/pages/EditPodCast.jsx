@@ -93,6 +93,9 @@ const EditPodCast = () => {
             {...register("image", { required: true })}
           />
         </div>
+        {errors.image && (
+          <small className="text-red-500 block">File is required</small>
+        )}
 
         <Label>Guest Name:</Label>
         <input
@@ -100,16 +103,23 @@ const EditPodCast = () => {
           placeholder="Guest_Name"
           defaultValue={podsCast.guest}
           className="block w-full outline-none bg-transparent rounded-md border border-purple-400 py-1.5 pl-2 pr-10 sm:text-sm sm:leading-6 mb-2"
-          {...register("guest", { maxLength: 80 })}
+          {...register("guest", { maxLength: 80, required: true })}
         />
+        {errors.guest && (
+          <small className="text-red-500 block">File is required</small>
+        )}
+
         <Label>Video Link:</Label>
         <input
           type="text"
           placeholder="Video_Link"
           defaultValue={podsCast.link}
           className="block w-full outline-none bg-transparent rounded-md border border-purple-400 py-1.5 pl-2 pr-10 sm:text-sm sm:leading-6 mb-2"
-          {...register("link", { maxLength: 100 })}
+          {...register("link", { maxLength: 100, required: true })}
         />
+        {errors.link && (
+          <small className="text-red-500 block">File is required</small>
+        )}
         <Label>Category:</Label>
         <Controller
           name="category"
