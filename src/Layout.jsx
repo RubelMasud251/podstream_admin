@@ -1,33 +1,39 @@
-// Layout.js
 import { useState, useEffect } from "react";
 import Login from "./pages/Login";
 import App from "./App";
 
 const Layout = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState("");
 
   useEffect(() => {
-    // Check local storage for the login status
-    const storedLoginStatus = localStorage.getItem("isLoggedIn");
+    const storedLoginStatus = localStorage.getItem("IsToken");
     if (storedLoginStatus) {
-      setIsLoggedIn(JSON.parse(storedLoginStatus));
+      try {
+        const parsedToken = JSON.parse(storedLoginStatus);
+        setToken(parsedToken);
+      } catch (error) {
+        // Handle invalid token or any other error
+        console.error("Invalid token", error);
+        handleLogout();
+      }
     }
   }, []);
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    // Save login status to local storage
-    localStorage.setItem("isLoggedIn", JSON.stringify(true));
+  const handleLogin = (data) => {
+    setToken(data.data);
+    localStorage.setItem("IsToken", JSON.stringify(data.data));
+    window.location.href = "/";
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    localStorage.removeItem("isLoggedIn");
+    setToken("");
+    localStorage.removeItem("IsToken");
+    window.location.href = "/login";
   };
 
   return (
     <div>
-      {isLoggedIn ? (
+      {token ? (
         <App handleLogout={handleLogout} />
       ) : (
         <Login handleLogin={handleLogin} />

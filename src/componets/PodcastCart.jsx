@@ -21,7 +21,7 @@ const PodcastCart = ({ singlePodcast }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/delete_podcast/${id}`)
+          .delete(`https://podscast-server.vercel.app/delete_podcast/${id}`)
           .then((res) => {
             if (res.data.deletedCount === 1) {
               setDeleted(true);

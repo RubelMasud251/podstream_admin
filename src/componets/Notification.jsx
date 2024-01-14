@@ -1,18 +1,22 @@
-import React, { useEffect } from "react";
-import Swal from "sweetalert2";
-import "sweetalert2/dist/sweetalert2.min.css";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 const WelcomeNotification = () => {
-  useEffect(() => {
-    Swal.fire({
-      title: "Welcome to the Admin Panel",
-      html: '<img src="https://t3.ftcdn.net/jpg/00/87/97/06/360_F_87970620_Tdgw6WYdWnrZHn2uQwJpVDH4vr4PINSc.jpg" alt="Welcome Image" style="max-width:100%; height:auto;">',
-      showCloseButton: true,
-      showCancelButton: false,
-    });
-  }, []);
+  // const [Notification, setNotification] = useState([0]);
 
-  return <></>;
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `https://podscast-server.vercel.app/notification/65a2c121a6e9544e226d44c5`
+  //     )
+  //     .then((res) => {
+  //       setNotification(res.data);
+  //     });
+  // }, []);
+
+  return (
+    <>{/* <img src={Notification.imglink} alt="" className="w-40 h-40" /> */}</>
+  );
 };
 
 export default WelcomeNotification;

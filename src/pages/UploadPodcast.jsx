@@ -21,10 +21,6 @@ const UploadPodcast = () => {
   const [loading, setLoading] = useState(false);
 
   const onSubmit = (data) => {
-    // if (errors.image || errors.guest || errors.link || errors.category) {
-    //   toast.error("Please fill out all required fields");
-    //   return;
-    // }
     setLoading(true);
     const formData = new FormData();
     formData.append("image", data.image[0]);
@@ -44,7 +40,7 @@ const UploadPodcast = () => {
 
         // post the database
         axios
-          .post("http://localhost:5000/upload_podcast", PodCast)
+          .post("https://podscast-server.vercel.app/upload_podcast", PodCast)
           .then((res) => {
             if (res.data.insertedId) {
               toast("PodCast uploaded Successfully!");

@@ -12,8 +12,9 @@ const Login = ({ handleLogin }) => {
       email: data.email,
       password: data.password,
     };
+    console.log(loginInfo);
     try {
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch("https://podscast-server.vercel.app/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23,11 +24,11 @@ const Login = ({ handleLogin }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.message); // Output success message
-        handleLogin(); // Call the handleLogin function on successful login
+        console.log(data);
+        handleLogin(data);
       } else {
         const errorData = await response.json();
-        console.error(errorData.error); // Output error message
+        console.error(errorData.error);
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -35,7 +36,7 @@ const Login = ({ handleLogin }) => {
   };
 
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 w-2/6 mx-auto">
+    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 lg:w-2/6 mx-auto">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm mb-4">
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           Sign in to your account
@@ -64,7 +65,7 @@ const Login = ({ handleLogin }) => {
           </div>
 
           <input
-            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="flex cursor-pointer w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             type="submit"
             value="Login"
           />

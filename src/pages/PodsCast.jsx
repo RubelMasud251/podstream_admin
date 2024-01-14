@@ -10,7 +10,7 @@ const PodsCast = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/podCasts")
+      .get("https://podscast-server.vercel.app/podCasts")
       .then((res) => {
         setAllPodsCast(res.data);
         setLoading(false); // Set loading to false when data is received

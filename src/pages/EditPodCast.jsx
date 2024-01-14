@@ -25,7 +25,7 @@ const EditPodCast = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/podCasts")
+      .get("https://podscast-server.vercel.app/podCasts")
       .then((res) => {
         const findPodcast = res.data.find((podCast) => podCast._id === id);
         setPodsCast(findPodcast);
@@ -63,7 +63,10 @@ const EditPodCast = () => {
 
         // update the database
         axios
-          .patch(`http://localhost:5000/update_podcast/${id}`, PodCast)
+          .patch(
+            `https://podscast-server.vercel.app/update_podcast/${id}`,
+            PodCast
+          )
           .then((res) => {
             console.log(res.data);
             if (res.data.acknowledged) {

@@ -35,10 +35,10 @@ const Navbar = ({ setMenuOpen, setDarkMode, darkMode, handleLogout }) => {
                 alt=""
               />
               <div className="">
-                <h4 className="text-xl">Admin Email</h4>
+                <h4 className="text-xl">datadoat@gmail.com</h4>
               </div>
               <hr />
-              <button className="font-bold">
+              <button className="font-bold" onClick={() => handleLogout()}>
                 <LogoutOutlined />
                 Sign Out
               </button>
