@@ -42,7 +42,7 @@ const UploadPodcast = () => {
 
         // post the database
         axios
-          .post("https://podscast-server.vercel.app//upload_podcast", PodCast)
+          .post("https://podscast-server.vercel.app/upload_podcast", PodCast)
           .then((res) => {
             if (res.data.insertedId) {
               toast("PodCast uploaded Successfully!");

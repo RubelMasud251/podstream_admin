@@ -55,35 +55,65 @@ const EditPodCast = () => {
       return;
     }
     setLoading(true);
+
     const formData = new FormData();
-    formData.append("image", data.image[0]);
-    axios.post(url, formData).then((res) => {
-      if (res.data.success) {
-        const thumbnail = res.data.data.display_url || podsCast.thumbnail;
 
-        const PodCast = {
-          thumbnail,
-          guest: data.guest,
-          link: data.link,
-          category: data.category,
-        };
+    // Check if a new image has been selected
+    if (data.image && data.image[0]) {
+      formData.append("image", data.image[0]);
 
-        // update the database
-        axios
-          .patch(
-            `https://podscast-server.vercel.app/update_podcast/${id}`,
-            PodCast
-          )
-          .then((res) => {
-            console.log(res.data);
-            if (res.data.acknowledged) {
-              toast("PodCast updated Successfully!");
-              reset();
-              setLoading(false);
-            }
-          });
-      }
-    });
+      // Upload the new image and update the database
+      axios.post(url, formData).then((res) => {
+        if (res.data.success) {
+          const thumbnail = res.data.data.display_url || podsCast.thumbnail;
+
+          const PodCast = {
+            thumbnail,
+            guest: data.guest,
+            link: data.link,
+            category: data.category,
+          };
+
+          // Update the database
+          axios
+            .patch(
+              `https://podscast-server.vercel.app/update_podcast/${id}`,
+              PodCast
+            )
+            .then((res) => {
+              console.log(res.data);
+              if (res.data.acknowledged) {
+                toast("PodCast updated Successfully!");
+                reset();
+                setLoading(false);
+              }
+            });
+        }
+      });
+    } else {
+      // No new image selected, update the database without changing the thumbnail
+      const PodCast = {
+        thumbnail: podsCast.thumbnail,
+        guest: data.guest,
+        link: data.link,
+        category: data.category,
+      };
+
+      // Update the database
+      axios
+        .patch(
+          `https://podscast-server.vercel.app/update_podcast/${id}`,
+          PodCast
+        )
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.acknowledged) {
+            toast("PodCast updated Successfully!");
+            reset();
+            setLoading(false);
+          }
+        });
+    }
   };
 
   console.log(podsCast.thumbnail);
@@ -103,7 +133,7 @@ const EditPodCast = () => {
             defaultValue={podsCast.thumbnail}
             type="file"
             className="w-fit mx-auto"
-            {...register("image", { required: true })}
+            {...register("image")}
           />
         </div>
 
