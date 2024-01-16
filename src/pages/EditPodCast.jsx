@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
@@ -22,8 +22,15 @@ const EditPodCast = () => {
   } = useForm();
 
   const [podsCast, setPodsCast] = useState([]);
+  const [Categories, setCategories] = useState([]);
 
   useEffect(() => {
+    // Fetch categories
+    axios.get("https://podscast-server.vercel.app/categories").then((res) => {
+      setCategories(res.data);
+    });
+
+    // Fetch a specific podcast based on the provided ID
     axios
       .get("https://podscast-server.vercel.app/podCasts")
       .then((res) => {
@@ -31,7 +38,7 @@ const EditPodCast = () => {
         setPodsCast(findPodcast);
       })
       .catch((err) => console.log(err));
-  }, [podsCast]);
+  }, [id]);
 
   if (podsCast === null) {
     return (
@@ -52,7 +59,7 @@ const EditPodCast = () => {
     formData.append("image", data.image[0]);
     axios.post(url, formData).then((res) => {
       if (res.data.success) {
-        const thumbnail = res.data.data.display_url;
+        const thumbnail = res.data.data.display_url || podsCast.thumbnail;
 
         const PodCast = {
           thumbnail,
@@ -78,6 +85,9 @@ const EditPodCast = () => {
       }
     });
   };
+
+  console.log(podsCast.thumbnail);
+
   return (
     <FormContainer className="">
       <form onSubmit={handleSubmit(onSubmit)} className="md:w-4/6 mx-auto">
@@ -96,9 +106,6 @@ const EditPodCast = () => {
             {...register("image", { required: true })}
           />
         </div>
-        {errors.image && (
-          <small className="text-red-500 block">File is required</small>
-        )}
 
         <Label>Guest Name:</Label>
         <input
@@ -134,11 +141,11 @@ const EditPodCast = () => {
               {...field}
               className="block w-full outline-none bg-transparent rounded-md border border-purple-400 py-1.5 pl-2 pr-20 sm:text-sm sm:leading-6 mb-2"
             >
-              <Option value="sports">Sports</Option>
-              <Option value="entertainment">Entertainment</Option>
-              <Option value="sports">Sports</Option>
-              <Option value="spirituality">Spirituality</Option>
-              <Option value="author">Author</Option>
+              {Categories.map((category) => (
+                <Option key={category._id} value={category.name}>
+                  {category.name}
+                </Option>
+              ))}
             </select>
           )}
         />

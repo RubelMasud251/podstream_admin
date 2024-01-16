@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -8,6 +8,8 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 import { IoCloudUpload } from "react-icons/io5";
 
 const UploadPodcast = () => {
+  const [Categories, setCategories] = useState([]);
+
   const url =
     "https://api.imgbb.com/1/upload?key=9111c34f5b459b762cfa32ade144b0ec";
 
@@ -40,7 +42,7 @@ const UploadPodcast = () => {
 
         // post the database
         axios
-          .post("https://podscast-server.vercel.app/upload_podcast", PodCast)
+          .post("https://podscast-server.vercel.app//upload_podcast", PodCast)
           .then((res) => {
             if (res.data.insertedId) {
               toast("PodCast uploaded Successfully!");
@@ -51,6 +53,12 @@ const UploadPodcast = () => {
       }
     });
   };
+
+  useEffect(() => {
+    axios.get("https://podscast-server.vercel.app/categories").then((res) => {
+      setCategories(res.data);
+    });
+  }, []);
 
   return (
     <FormContainer className="">
@@ -100,13 +108,11 @@ const UploadPodcast = () => {
           {...register("category", { required: true })}
           className="block w-full outline-none bg-transparent rounded-md border border-purple-400 py-1.5 pl-2 pr-20 sm:text-sm sm:leading-6 mb-2"
         >
-          <Option className="" value="sports">
-            Sports
-          </Option>
-          <Option value="entertainment">Entertainment</Option>
-          <Option value="sports">Sports</Option>
-          <Option value="spirituality">Spirituality</Option>
-          <Option value="author">Author</Option>
+          {Categories.map((category) => (
+            <Option key={category._id} value={category.name}>
+              {category.name}
+            </Option>
+          ))}
         </select>
 
         {loading ? (

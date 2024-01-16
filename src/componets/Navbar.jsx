@@ -20,7 +20,7 @@ const Navbar = ({ setMenuOpen, setDarkMode, darkMode, handleLogout }) => {
           />
         </button>
         <div className="user-dropdown-wrapper">
-          <div className="h-full py-2">
+          <div className="h-full py-2 cursor-pointer">
             <img
               className="user-img w-12 h-12 rounded-full"
               src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -38,7 +38,10 @@ const Navbar = ({ setMenuOpen, setDarkMode, darkMode, handleLogout }) => {
                 <h4 className="text-xl">datadoat@gmail.com</h4>
               </div>
               <hr />
-              <button className="font-bold" onClick={() => handleLogout()}>
+              <button
+                className="font-bold text-red-600"
+                onClick={() => handleLogout()}
+              >
                 <LogoutOutlined />
                 Sign Out
               </button>
@@ -59,7 +62,7 @@ const NavDiv = styled.div`
   color: ${({ theme }) => theme.text_primary};
   gap: 30px;
   background: ${({ theme }) => theme.bg};
-  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0);
   backdrop-filter: blur(5.7px);
   -webkit-backdrop-filter: blur(5.7px);
 `;
